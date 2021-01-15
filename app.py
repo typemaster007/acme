@@ -1,4 +1,4 @@
-#from flask_cors import CORS
+from flask_cors import CORS
 from pymongo import MongoClient
 import pymongo
 import json
@@ -13,7 +13,7 @@ This is the backend prototype HTTP server that:
 2. Uses MongoDB Atlas which is a cloud-based non relational database that allows for efficient data 
    storage and retrieval.
 '''
-#CORS(app)  # Added this for no access control origin cors policy error in frontend
+CORS(app)  # Added this for no access control origin cors policy error in frontend
 
 client = pymongo.MongoClient(
     "mongodb+srv://testuser:test123@cluster0.mlfc9.mongodb.net/test?retryWrites=true&w=majority")
@@ -38,11 +38,13 @@ def getdevices():
 ## CREATE NEW SENSOR DEVICE ##
 @app.route("/createdevice", methods=["POST"])
 def createdevice():
-    get_user_data = request.get_json()
-    name = get_user_data["name"]
-    status = get_user_data["status"]
+    get_devicedata = request.get_json()
+    name = get_devicedata["name"]
+    status = get_devicedata["status"]
+    type = get_devicedata["type"]
+    industry = get_devicedata["industry"]
     
-    if not get_user_data:
+    if not get_devicedata:
         err = {'ERROR': 'No data passed'}
         return jsonify(err)
     else:
@@ -60,14 +62,17 @@ def createdevice():
             return jsonify("Device already present, cannot add")
         else:
             database.devices.insert(
-                {'id': int(id), 'name': name, 'status': status })
+                {'id': int(id), 'name': name, 'status': status, 'type': type, 'industry': industry })
             return jsonify("Device added successfully!")
 
 
 ## DELETE SENSOR DEVICE ##
 @app.route("/deletedevice/<device_id>", methods=["DELETE"])
 def deletedevice(device_id):
+    if(device_id=='null'):
+        return jsonify("Please enter the device ID"),200
     try:
+        
         # Delete the device
         delete_device = database.devices.delete_one({"id": int(device_id)})
 
@@ -89,6 +94,8 @@ def updatedevice(device_id):
     data = request.get_json()
     name = data["name"]
     status = data["status"]
+    type = data["type"]
+    industry = data["industry"]
     
     if not data:
         err = {'ERROR': 'No data passed'}
@@ -98,7 +105,7 @@ def updatedevice(device_id):
         if name:
             if database.devices.find_one({'id': int(device_id)}):
                 database.devices.update_one({'id': int(device_id)}, {
-                    "$set": {'name': name, 'status': status}})
+                    "$set": {'name': name, 'status': status, 'type': type, 'industry': industry }})
                 return jsonify("Device updated Successfully!"),200
             else:
                 return jsonify("Device not found, check if it is present in the database"),404
