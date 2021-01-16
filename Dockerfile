@@ -1,12 +1,17 @@
-FROM python:3.8.1
+FROM ubuntu:16.04
 
-MAINTAINER Amogh Adithya "amoghadithyabl@gmail.com"
+MAINTAINER Your Name "youremail@domain.tld"
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apt-get update -y && \
+    apt-get install -y python-pip python-dev
 
-COPY requirements.txt /usr/src/app
+# We copy just the requirements.txt first to leverage Docker cache
+COPY ./requirements.txt /app/requirements.txt
+
+WORKDIR /app
+
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "flask" ]
-CMD ["run", "--host=0.0.0.0", "--port=5000"]
+COPY . /app
+
+CMD ["python", "app.py" ]
