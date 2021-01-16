@@ -81,7 +81,7 @@ def deletedevice(device_id):
             return jsonify("Device deleted"),200
         else:
             # Resource Not found
-            return jsonify("Device not found!"),404
+            return jsonify("Device not found!")
     except:
         # Error while trying to delete the resource
         # Add message for debugging purpose
