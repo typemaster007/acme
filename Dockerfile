@@ -1,6 +1,6 @@
 FROM python:3.8.1
 
-MAINTANER Amogh Adithya "amoghadithyabl@gmail.com"
+MAINTAINER Amogh Adithya "amoghadithyabl@gmail.com"
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
