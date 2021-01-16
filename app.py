@@ -111,4 +111,4 @@ def updatedevice(device_id):
                 return jsonify("Device not found, check if it is present in the database"),404
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
