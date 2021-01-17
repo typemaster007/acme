@@ -5,6 +5,15 @@ import json
 from flask import Flask, jsonify, request
 app = Flask(__name__)
 
+'''
+Author: Amogh Adithya Bangalore
+This is the backend prototype HTTP server that:
+1. Exposes REST endpoints for clients to create a device, delete a device, read a device state, and
+   update a device state.
+2. Uses MongoDB Atlas which is a cloud-based non relational database that allows for efficient data 
+   storage and retrieval.
+'''
+
 CORS(app)  # Added this for no access control origin cors policy error in frontend
 
 client = pymongo.MongoClient(
